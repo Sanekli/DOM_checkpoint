@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="cart-container">
+
+  <div class="item" id="item1">
+    <span>Item 1</span>
+    <div>
+      <button onclick="decrement('item1')">-</button>
+      <span id="quantity1">1</span>
+      <button onclick="increment('item1')">+</button>
+      <button onclick="removeItem('item1')">Delete</button>
+      <button class="like-button" onclick="toggleLike('item1')">&#x2665;</button>
+    </div>
+  </div>
+  <div class="item" id="item2">
+    <span>Item 2</span>
+    <div>
+      <button onclick="decrement('item2')">-</button>
+      <span id="quantity2">1</span>
+      <button onclick="increment('item2')">+</button>
+      <button onclick="removeItem('item2')">Delete</button>
+      <button class="like-button" onclick="toggleLike('item2')">&#x2665;</button>
+    </div>
+  </div>
+  <div>
+    <strong>Total Price:</strong> $<span id="totalPrice">0</span>
+  </div>
+</div>
+
+<script>
+  const prices = {
+    item1: 10, 
+    item2: 15, 
+
+  };
+  const quantities = {
+    item1: 1,
+    item2: 1,
+
+  };
+
+  const likes = {
+    item1: false,
+    item2: false,
+  };
+
+  function updateTotalPrice() {
+    let total = 0;
+    for (const item in prices) {
+      total += prices[item] * quantities[item];
+    }
+    document.getElementById('totalPrice').textContent = total;
+  }
+
+  function increment(itemId) {
+    quantities[itemId]++;
+    document.getElementById(`quantity${itemId.slice(-1)}`).textContent = quantities[itemId];
+    updateTotalPrice();
+  }
+
+  function decrement(itemId) {
+    if (quantities[itemId] > 1) {
+      quantities[itemId]--;
+      document.getElementById(`quantity${itemId.slice(-1)}`).textContent = quantities[itemId];
+      updateTotalPrice();
+    }
+  }
+
+  function removeItem(itemId) {
+    const itemElement = document.getElementById(itemId);
+    itemElement.parentNode.removeChild(itemElement);
+    delete prices[itemId];
+    delete quantities[itemId];
+    delete likes[itemId];
+    updateTotalPrice();
+  }
+
+  function toggleLike(itemId) {
+    likes[itemId] = !likes[itemId];
+    const likeButton = document.getElementById(itemId).getElementsByClassName('like-button')[0];
+    likeButton.classList.toggle('liked', likes[itemId]);
+  }
+  updateTotalPrice();
+</script>
+
+</body>
+</html>
